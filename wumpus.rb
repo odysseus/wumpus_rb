@@ -1,16 +1,22 @@
 class Player
+  attr_reader :xposition, :yposition, :facing_index
 
-  def initialize position, facing_index
-    @position = position
+  def initialize maze, x, y, facing_index
+    @maze = maze
+    @xposition = x
+    @yposition = y
     @facing_index = facing_index
   end
 
   def move_forward
-    case facing
-    when :north
-    when :east
-    when :south
-    when :west
+    nextx, nexty = next_position
+    if valid_position(nextx, nexty)
+      @xposition = nextx
+      @yposition = nexty
+      puts "You move in to the next room"
+      #@maze.query_room(@xposition, @yposition)
+    else
+      puts "You bump into a wall"
     end
   end
 
@@ -44,14 +50,37 @@ class Player
     facing[@facing_index]
   end
 
+  def next_position
+    case facing
+    when :north
+      return [@xposition - 1, @yposition]
+    when :east
+      return [@xposition, @yposition + 1]
+    when :south
+      return [@xposition + 1, @yposition]
+    when :west
+      return [@xposition, @yposition - 1]
+    end
+  end
+
+  def valid_position? x, y
+    if x < 0 or y < 0 or x > (@width + 1) or y  > (@height + 1)
+      false
+    else
+      true
+    end
+  end
+
 end
 
 class SquareMaze
   def initialize(width, height)
+    @width = width
+    @height = height
     @maze = []
-    height.times do |i|
+    @height.times do |i|
       @maze[i] = []
-      width.times do |j|
+      @width.times do |j|
         @maze[i][j] = Room.new
       end
     end
