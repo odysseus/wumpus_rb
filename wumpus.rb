@@ -14,7 +14,6 @@ class Player
       @xposition = nextx
       @yposition = nexty
       puts "You move in to the next room"
-      #@maze.query_room(@xposition, @yposition)
     else
       puts "You bump into a wall"
     end
